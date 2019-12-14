@@ -55,7 +55,8 @@ class Indicators:
         df["SMA"] = self.discretize(df, "SMA")
         df["BollingerBands"] = self.discretize(df, "BollingerBands")
         
-        df["State"] = momentum # TODO: replace this with some useful indicator, and add others
+        #df["State"] = momentum # TODO: replace this with some useful indicator, and add others
+        df["State"] = df.apply(func=lambda x: int(int(x.iloc[1]) << 6 | int(x.iloc[2])), axis=1)
         df.sort_values("State", inplace=True)
         df["State"] = pd.cut(df["State"], self.Bin_Size, labels=False)
         df.sort_index(inplace=True)
@@ -68,6 +69,6 @@ class Indicators:
     """
     def get_state_size(self):
         # TODO: Change this if you add more indicators
-        return self.Bin_Size
+        return self.Bin_Size * 64
     
         
